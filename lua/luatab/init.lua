@@ -41,6 +41,7 @@ M.windowCount = function(index)
 end
 
 M.devicon = function(bufnr, isSelected)
+    isSelected = true -- Color devicon always
     local icon, devhl
     local file = vim.fn.bufname(bufnr)
     local buftype = vim.fn.getbufvar(bufnr, '&buftype')
