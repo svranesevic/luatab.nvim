@@ -41,7 +41,7 @@ M.windowCount = function(index)
 end
 
 M.devicon = function(bufnr, isSelected)
-    isSelected = true -- Color devicon always
+    local isSelected = isSelected or M.deviconColorInactive
     local icon, devhl
     local file = vim.fn.bufname(bufnr)
     local buftype = vim.fn.getbufvar(bufnr, '&buftype')
@@ -69,6 +69,8 @@ M.devicon = function(bufnr, isSelected)
     end
     return ''
 end
+
+M.deviconColorInactive = false
 
 M.separator = function(index)
     return (index < vim.fn.tabpagenr('$') and '%#TabLine#|' or '')
@@ -107,6 +109,7 @@ local setup = function(opts)
     if opts.modified then M.modified = opts.modified end
     if opts.windowCount then M.windowCount = opts.windowCount end
     if opts.devicon then M.devicon = opts.devicon end
+    if opts.deviconColorInactive then M.deviconColorInactive = opts.deviconColorInactive end
     if opts.separator then M.separator = opts.separator end
     if opts.cell then M.cell = opts.cell end
     if opts.tabline then M.tabline = opts.tabline end
