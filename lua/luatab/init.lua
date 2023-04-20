@@ -65,14 +65,18 @@ M.devicon = function(bufnr, isSelected)
         local hl = h.create_component_highlight_group({bg = bg, fg = fg}, devhl)
         local selectedHlStart = (isSelected and hl) and '%#'..hl..'#' or ''
         local selectedHlEnd = isSelected and '%#TabLineSel#' or ''
-        return selectedHlStart .. icon .. selectedHlEnd .. ' '
+        return selectedHlStart .. icon .. selectedHlEnd
     end
     return ''
 end
 
 M.deviconColorInactive = false
 
-M.separator = function(index)
+M.leftSeparator = function(isSelected)
+  return ''
+end
+
+M.rightSeparator = function(index)
     return (index < vim.fn.tabpagenr('$') and '%#TabLine#|' or '')
 end
 
@@ -83,12 +87,13 @@ M.cell = function(index)
     local bufnr = buflist[winnr]
     local hl = (isSelected and '%#TabLineSel#' or '%#TabLine#')
 
-    return hl .. '%' .. index .. 'T' .. ' ' ..
+    return hl .. '%' .. index .. 'T' ..
+        M.leftSeparator(isSelected) ..
         M.windowCount(index) ..
         M.title(bufnr) .. ' ' ..
         M.modified(bufnr) ..
         M.devicon(bufnr, isSelected) .. '%T' ..
-        M.separator(index)
+        M.rightSeparator(index) .. ' '
 end
 
 M.tabline = function()
@@ -110,7 +115,8 @@ local setup = function(opts)
     if opts.windowCount then M.windowCount = opts.windowCount end
     if opts.devicon then M.devicon = opts.devicon end
     if opts.deviconColorInactive then M.deviconColorInactive = opts.deviconColorInactive end
-    if opts.separator then M.separator = opts.separator end
+    if opts.rightSeparator then M.rightSeparator = opts.rightSeparator end
+    if opts.leftSeparator then M.leftSeparator = opts.leftSeparator end
     if opts.cell then M.cell = opts.cell end
     if opts.tabline then M.tabline = opts.tabline end
 
