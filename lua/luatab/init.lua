@@ -8,7 +8,7 @@ M.title = function(bufnr)
     if buftype == 'help' then
         return 'help:' .. vim.fn.fnamemodify(file, ':t:r')
     elseif buftype == 'quickfix' then
-        return 'quickfix'
+        return 'QuickFix'
     elseif filetype == 'TelescopePrompt' then
         return 'Telescope'
     elseif filetype == 'git' then
@@ -49,12 +49,14 @@ M.devicon = function(bufnr, isSelected)
     local devicons = require'nvim-web-devicons'
     if filetype == 'TelescopePrompt' then
         icon, devhl = devicons.get_icon('telescope')
-    elseif filetype == 'fugitive' then
+    elseif filetype == 'git' or filetype == 'fugitive' then
         icon, devhl = devicons.get_icon('git')
     elseif filetype == 'vimwiki' then
         icon, devhl = devicons.get_icon('markdown')
     elseif buftype == 'terminal' then
         icon, devhl = devicons.get_icon('zsh')
+    elseif buftype == 'quickfix' then
+        icon, devhl = "", 'Keyword'
     else
         icon, devhl = devicons.get_icon(file, vim.fn.expand('#'..bufnr..':e'))
     end
