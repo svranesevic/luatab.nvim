@@ -4,7 +4,7 @@
 local M = {}
 
 M.highlight = function(name, foreground, background)
-  local command = {'highlight', name}
+  local command = { 'highlight', name }
   if foreground and foreground ~= 'none' then
     table.insert(command, 'guifg=' .. foreground)
   end
