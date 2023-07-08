@@ -31,15 +31,6 @@ M.modified = function(bufnr)
   return vim.fn.getbufvar(bufnr, '&modified') == 1 and '[+] ' or ''
 end
 
-M.windowCount = function(index)
-  local nwins = 0
-  local success, wins = pcall(vim.api.nvim_tabpage_list_wins, index)
-  if success then
-    for _ in pairs(wins) do nwins = nwins + 1 end
-  end
-  return nwins > 1 and '(' .. nwins .. ') ' or ''
-end
-
 M.devicon = function(bufnr, isSelected)
   local isSelected = isSelected or M.deviconColorInactive
   local icon, devhl
@@ -75,11 +66,13 @@ end
 M.deviconColorInactive = false
 
 M.leftSeparator = function(isSelected)
-  return ''
+  local hiStart = isSelected and '%#Keyword#' or '' -- Directory, Keyword
+  local hiEnd = isSelected and '%#TabLineSel#' or '%#TabLine#'
+  return hiStart .. '▎' .. hiEnd .. ' '
 end
 
 M.rightSeparator = function(index)
-  return (index < vim.fn.tabpagenr '$' and '%#TabLine#|' or '')
+  return (index == vim.fn.tabpagenr '$' and ' %#TabLine#│' or ' ')
 end
 
 M.cell = function(index)
@@ -91,7 +84,6 @@ M.cell = function(index)
 
   return hl .. '%' .. index .. 'T' ..
     M.leftSeparator(isSelected) ..
-    M.windowCount(index) ..
     M.title(bufnr) .. ' ' ..
     M.modified(bufnr) ..
     M.devicon(bufnr, isSelected) .. '%T' ..
@@ -114,7 +106,6 @@ local setup = function(opts)
   opts = opts or {}
   if opts.title then M.title = opts.title end
   if opts.modified then M.modified = opts.modified end
-  if opts.windowCount then M.windowCount = opts.windowCount end
   if opts.devicon then M.devicon = opts.devicon end
   if opts.deviconColorInactive then M.deviconColorInactive = opts.deviconColorInactive end
   if opts.rightSeparator then M.rightSeparator = opts.rightSeparator end
