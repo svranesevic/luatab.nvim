@@ -65,8 +65,10 @@ end
 
 M.deviconColorInactive = false
 
+M.activeTabHl = 'Directory'
+
 M.leftSeparator = function(isSelected)
-  local hiStart = isSelected and '%#Keyword#' or '' -- Directory, Keyword
+  local hiStart = isSelected and '%#' .. M.activeTabHl .. '#' or ''
   local hiEnd = isSelected and '%#TabLineSel#' or '%#TabLine#'
   return hiStart .. '▎' .. hiEnd .. ' '
 end
@@ -108,8 +110,9 @@ local setup = function(opts)
   if opts.modified then M.modified = opts.modified end
   if opts.devicon then M.devicon = opts.devicon end
   if opts.deviconColorInactive then M.deviconColorInactive = opts.deviconColorInactive end
-  if opts.rightSeparator then M.rightSeparator = opts.rightSeparator end
+  if opts.activeTabHl then M.activeTabHl = opts.activeTabHl end
   if opts.leftSeparator then M.leftSeparator = opts.leftSeparator end
+  if opts.rightSeparator then M.rightSeparator = opts.rightSeparator end
   if opts.cell then M.cell = opts.cell end
   if opts.tabline then M.tabline = opts.tabline end
 
